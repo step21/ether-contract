@@ -1,0 +1,207 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head><title>SchellingCoin | Contract in Serpent for Ethereum</title><meta property="og:title" name="fb_title" content="SchellingCoin | Contract in Serpent for Ethereum"/><meta name="description" property="og:description" content="SchellingCoin implementation in Serpent by Vitalik Buterin. Smart Contract in Serpent for Ethereum."/><meta property="og:type" content="website"/><meta property="og:image" content="http://s3.amazonaws.com/m.saltado.com/sites/ether/ether.fund.jpg"/><link rel="image_src" href="http://s3.amazonaws.com/m.saltado.com/sites/ether/ether.fund.jpg"/><meta name="google-site-verification" content="pNed9_q5W-fYAfSL3BCuWKwV7vEuarPtuRysHY3AIEE" /><meta charset="UTF-8"/><meta name="author" content="Ether.Fund"/><meta name="keywords" content="Ethereum, ether, smart contracts, dapps, blockchain, decentralized, applications, bitcoin, sidechain, platform"/><meta name="google-site-verification" content="UA-35793288-5"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta property="og:site_name" content="Ether.Fund"/><meta property="fb:app_id" content="702869976473244"/><meta property="og:locale" content="en_US"/><link rel="canonical" href="http://ether.fund/contract/02aed/schellingcoin"><link rel="shortcut icon" href="http://s3.amazonaws.com/m.saltado.com/sites/ether/favicon.ico"/><link rel="alternate" type="application/rss+xml" title="ether.fund RSS feed" href="http://ether.fund/feeds/rss"/><!-- Le HTML5 shim, for IE6-8 support of HTML5 elements --><!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]--><!-- Bootstrap CSS --><link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"><link href="http://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"><!-- jQuery CSS --><link rel="stylesheet" type="text/css" href="http://s3.amazonaws.com/s.saltado.com/css/com/default.css?6"><link rel="stylesheet" type="text/css" href="http://s3.amazonaws.com/s.saltado.com/css/sites/tech/ether.css"><!-- super js --><script type="text/javascript">
+function imgError(image) { image.onerror = ""; image.src = "http://s3.amazonaws.com/m.saltado.com/images/content/noimg_en.jpg"; return true; }
+</script><style type="text/css">
+	#contractIcon { margin-right:4px; }
+	
+	#push { display:none; }
+	#footer { display:none; }
+	.alert { padding:10px; }
+
+	#editorLoader {
+		margin-top:4px; padding-top:20px;
+		width:100%; height:100%; min-height:600px;
+		border: solid 1px #ccc;
+		border-right:0px;
+		border-top-right-radius:0px; border-bottom-right-radius:0px;
+		border-top-left-radius:4px; border-bottom-left-radius:4px;
+		color:#888;
+		text-align:center;
+	}
+	#editor {
+		display:none;
+		margin-top:4px;
+		width:100%; height:100%; min-height:600px;
+		border-right:0px;
+		border-top-right-radius:0px; border-bottom-right-radius:0px;
+	}
+	#editorPanel {
+		width:100%; height:100%; min-height:600px;
+		margin-top:4px;
+		border-top-left-radius:0px; border-bottom-left-radius:0px;
+		overflow: hidden;
+	}
+	
+	#contractTabs {}
+	#contractTabs li a { padding:10px; }
+	#contractTabContent .tab-pane { padding: 5px; }
+	
+</style></head><!-- Ether.Fund | Copyright Saltado, Inc. | 5th January 2015 14:42 --><body itemscope itemtype="http://schema.org/ItemPage"><div id="wrap"><nav class="navbar navbar-default navbar-static-top" role="navigation"><div class="container"><div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"
+		style='height:32px; padding-top:5px;'><span class="sr-only">Toggle navigation</span><i class="fa fa-bars fa-lg"></i></button><a class=' navbar-brand brand' href="/" style='padding-bottom:0px;'><span id="brandtext" style='position:relative; font-weight:bold; font-size:26px;
+		top:0px; '>Ether<span id='dot'>.</span><span>Fund</span></span></a></div><div class="collapse navbar-collapse navbar-ex1-collapse"><ul class="nav navbar-nav"><li class=""><a href="/market"><i class='fa fa-line-chart fa-fw' style='margin-right:1px;'></i>Market</a></li><li class=""><a href="/tools/"><i class='fa fa-wrench fa-fw' style='margin-right:0px;'></i>Tools</a></li><li class=""><a href="/contracts/"><i class='fa fa-file-text-o fa-fw' style='margin-right:0px;'></i>Contracts</a></li><li class=""><a href="/explorer"><i class='fa fa-cube fa-fw' style='margin-right:0px;'></i>Explorer</a></li><li class=""><a href="/dapps/"><span class='ethergreen' style='margin-right:1px;'>Ð</span>Apps</a></li></ul><form class="navbar-form navbar-right search-form" style="width:150px;"
+		action="/search" role='search'><span class="input-group-btn"><input id='navSearch' class="input form-control typeahead" type="text" name='q' data-app="" autocomplete="off" data-provide="typeahead" placeholder="Search" style="width:136px;"></span></form><ul class='nav navbar-nav navbar-right'><li class=""><a class="" href="/user/login/"><i class='fa fa-sign-in faw' style='margin-right:1px;'></i>Login</a></li></ul></div></div></nav><div class="container"><div itemscope itemtype="http://schema.org/Code" style='height:100%;'><ul class='breadcrumbs' style='display:none;'><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/" itemprop="url"><span itemprop="title">Ethereum</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/contracts/" itemprop="url"><span itemprop="title">Smart Contracts</span></a></li><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/contracts/serpent" itemprop="url"><span itemprop="title">Serpent</span></a><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/contracts/coin" itemprop="url"></li><span itemprop="title">Coin</span></a><li class='active' itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/contract/02aed/schellingcoin" itemprop="url"><span itemprop="title">SchellingCoin</span></a></li></ul><div class='row'><div class='col-md-11'><h1><span id='contractIcon'><i class='fa fa-file-o'></i></span><span id='contractName' itemprop="name headline">SchellingCoin</span></h1></div><div class='col-md-1'><div id='contractSpin'></div></div></div><div class='row' style='height:100%;'><div class='col-md-8' style='padding-right:0px; height:100%;'><div id='editorLoader' style='background-color:#323232'><div style='color:#555e73; font-size:20px;'><i class='fa fa-cog fa-spin fa-3x'></i> Loading...</div></div><pre id="editor" value="" itemprop="sampleType text"># SchellingCoin implementation
+#
+# Stored variables:
+#
+# 0: last_processed_block
+# 1: number of hashes submitted
+# 2: value
+# 3: quicksort_pairs address
+#
+# 2^160 + 3x: hash
+# 2^160 + 3x + 1: deposit
+# 2^160 + 3x + 2: address
+# 2^170 + x: value
+#
+# Transaction types:
+#
+# [1, sha3([address, value])] -&gt; id: submit hash (only works when block number mod 100 &lt; 50)
+#
+# [2, id, value]: submit answer (only works when block number mod 100 &gt;= 50)
+#
+# [3]: balance query
+#
+# [4]: value query
+#
+# Parameters:
+#
+# Epoch length: 100 blocks
+# Target savings depletion rate: 0.1% per epoch
+
+init:
+    contract.storage[0] = block.number
+    contract.storage[3] = create(&#39;quicksort_pairs.se&#39;)
+
+code:
+    HASHES = 2^160    
+    VALUES = 2^170
+    if block.number / 100 &gt; contract.storage[0] / 100:
+        # Sort all hashes
+        N = contract.storage[1]
+        o = array(N * 2)
+        i = 0
+        j = 0
+        while i &lt; N:
+            if contract.storage[VALUES + i]:
+                o[j] = contract.storage[VALUES + i]   
+                o[j + 1] = i
+                j += 2
+            i += 1
+        values = call(contract.storage[3], o, j, j)
+
+        # Calculate total deposit, refund non-submitters and
+        # cleanup
+
+        deposits = array(j / 2)
+        addresses = array(j / 2)
+        
+        i = 0
+        total_deposit = 0
+        while i &lt; j / 2:
+            base_index = HASHES + values[i * 2 + 1] * 3
+            deposits[i] = contract.storage[base_index + 1]
+            addresses[i] = contract.storage[base_index + 2]
+            if contract.storage[VALUES + values[i * 2 + 1]]:
+                total_deposit += deposits[i]
+            else:
+                send(addresses[i], deposits[i] * 999 / 1000)
+            i += 1
+
+        inverse_profit_ratio = total_deposit / (contract.balance / 1000) + 1
+
+        # Reward everyone
+        i = 0
+        running_deposit_sum = 0
+        halfway_passed = 0
+        while i &lt; j / 2:
+            new_deposit_sum = running_deposit_sum + deposits[i]
+            if new_deposit_sum &gt; total_deposit / 4 and running_deposit_sum &lt; total_deposit * 3 / 4:
+                send(addresses[i], deposits[i] + deposits[i] / inverse_profit_ratio * 2)
+            else:
+                send(addresses[i], deposits[i] - deposits[i] / inverse_profit_ratio)
+
+            if not halfway_passed and new_deposit_sum &gt; total_deposit / 2:
+                contract.storage[2] = contract.storage[VALUES + i]
+                halfway_passed = 1
+            contract.storage[VALUES + i] = 0
+            running_deposit_sum = new_deposit_sum
+            i += 1
+        contract.storage[0] = block.number
+        contract.storage[1] = 0
+        
+    # Hash submission
+    if msg.data[0] == 1:
+        if block.number % 100 &lt; 50:
+            cur = contract.storage[1]
+            pos = HASHES + cur * 3
+            contract.storage[pos] = msg.data[1]
+            contract.storage[pos + 1] = msg.value
+            contract.storage[pos + 2] = msg.sender
+            contract.storage[1] = cur + 1
+            return(cur)
+    # Value submission
+    elif msg.data[0] == 2:
+        if sha3([msg.sender, msg.data[2]], 2) == contract.storage[HASHES + msg.data[1] * 3]:
+            contract.storage[VALUES + msg.data[1]] = msg.data[2]
+            return(1)
+    # Balance request
+    elif msg.data[0] == 3:
+        return(contract.balance)
+    # Value request
+    else:
+        return(contract.storage[2])
+    </pre></div><div class='col-md-4' style='padding-left:0px; height:100%;'><div id='editorPanel' class='well well-sm'><h4 id='contractType' class='clearFix' style='padding-bottom:6px;'><a id='language' class='label label-primary' itemprop="programmingLanguage" target="_blank" title=""
+		href="/contracts/serpent" itemprop="subClassOf">Serpent</a><span title="Smart contracts automatically move digital assets according to arbitrary pre-specified rules." itemprop='genre'> contract for </span><a style='color:#888;' href="https://www.ethereum.org" target="_blank" itemprop="runtime targetProduct"
+		title="ethereum.org">ethereum</a><a id='shareBtn' href="#" style='float:right;'><i class='fa fa-share-alt'></i></a></h4><ul id='contractTabs' class="nav nav-tabs" role="tablist" style=''><li class="active"><a href="#code" role="tab" data-toggle="tab">Code</a></li><li><a href="#storage" role="tab" data-toggle="tab">Storage</a></li><li><a href="#messages" role="tab" data-toggle="tab">Messages</a></li><li><a href="#debug" role="tab" data-toggle="tab">Debug</a></li></ul><div id='contractTabContent' class="tab-content" style='height:432px; color:#666; padding-top:10px;'><div class="tab-pane active" id="code"><p id='contractDesc' itemprop="description">
+			SchellingCoin implementation in Serpent by Vitalik Buterin.
+		</p><p id='contractTags'><ul class='list list-unstyled list-inline tagList'><li><a id='languageLabel' href="/contracts/serpent" class='label label-primary' title="Serpent programming language for ethereum">Serpent</a></li><li><a href="/contracts/coin" class='label label-default categoryLabel' title='Coin category'>Coin</a></li><li><span><span id='privacyLabel' class='label label-success'><i class='fa fa-globe'></i> Public</span></span></li></ul></p><p id='contractExt'><a target="_blank" href="https://github.com/ethereum/serpent/blob/master/examples/schellingcoin.se" itemprop="codeRepository"><i class='fa fa-github fa-2x'></i>GitHub</a></p><p id='contractHistory'><ul id='contractHistoryList' class='list list-unstyled'><li>Created by
+					<a itemprop='author creator editor'
+					href="/profile/jrbedard">jrbedard</a><span style='margin-left:5px;'><abbr class="timeago" itemprop="datePublished" datetime="{contract.created|date:'c'}}" title="2014-10-22T19:47:29-07:00"></abbr></span></li></ul></p><p class="btn-group"><a id="prefBtn" class='btn btn-default btn-sm'><i class='fa fa-cog'></i> Preferences</a></p><p class=''><b>Note</b>: Your changes won't be saved, because not <a href="/user/login/">Logged-in</a>.
+				
+				<p>
+				Create your own <a id='newBtn' class='btn btn-default btn-sm' href="/tool/contract"><i class='fa fa-file-o'></i> Contract</a></p></p></div><div class="tab-pane" id="storage"></div><div class="tab-pane" id="messages"></div><div class="tab-pane" id="debug"></div></div><hr><div id='bottomBtns'><div class="btn-group"><a id='downloadBtn' class='btn btn-default btn-sm'><i class='fa fa-download'></i> Download</a><a id="forkBtn" class='btn btn-default btn-sm' title=''><i class='fa fa-code-fork'></i> Fork <span id='forkCount' class='label label-default'>0</span></a><a id="starBtn" class='btn btn-default btn-sm' title='Show the author appreciation!'><i class='fa fa-star' style='color:#e6c200;'></i> Star
+			<span id='starCount' class='label label-default'>3</span></a></div></div><div style='display:none;'><form id='downloadForm' method="POST" action=""><input type='hidden' name='csrfmiddlewaretoken' value='D3pWyZHf2iKhkcf1S78OaJqqPjw92RG3' /><input id='saveName' name="name" value=""><input id='saveLang' name="lang" value=""><input id='saveCode' name="code" value=""></form></div></div></div></div><!-- Contract Modal --><div class="modal fade" id="contractModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog" style='width:400px;'><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><h4 class="modal-title"><i class='fa fa-edit'></i> Edit Contract Info</h4></div><div class="modal-body"><form class='form'><div class='form-group'><label>Name:</label><div class='input-group' style='width:100%;'><input id='contractName' class='form-control input' value="SchellingCoin" maxlength="32"></div></div><div class='form-group' style='width:100%;'><label>Description:</label><div class='input-group' style='width:100%;'><textarea id='contractDesc' class='form-control input' maxlength="256" rows="3">SchellingCoin implementation in Serpent by Vitalik Buterin.</textarea></div></div><div class='row'><div class='form-group col-md-6'><label>Language:</label><div class='input-group'><div class='form-group' style='margin-bottom:8px;'><input id="langHidden" name="language" value="LLL" type="hidden"><span id='' class="input-group"><button id="btnLanguage" class="btn btn-default dropdown-toggle"
+			data-toggle="dropdown" type="button"
+			name="language" value="" title=""
+			style='min-height:30px;' >Serpent <span class='caret'></span></button><ul id='dropdownLanguages' class="dropdown-menu" role="menu" style='left:auto;'><li title="LLL Language"><a data-id="LLL" href="#">LLL</a></li><li title="Mutan Language"><a data-id="Mutan" href="#">Mutan</a></li><li title="Serpent Language"><a data-id="Serpent" href="#">Serpent</a></li><li title="Solidity Language"><a data-id="Solidity" href="#">Solidity</a></li></ul></span></div></div></div><div class='form-group col-md-6'><label>Privacy:</label><div class='input-group'><div class='form-group' style='margin-bottom:8px;'><input id="privacyHidden" name="privacy" value="public" type="hidden"><span id='' class="input-group"><button id="btnPrivacy" class="btn btn-default dropdown-toggle "
+			data-toggle="dropdown" type="button"
+			name="privacy" value="public" title=""
+			style='min-height:30px;' >public <span class='caret'></span></button><ul id='dropdownPrivacy' class="dropdown-menu" role="menu" style='left:auto;'><li title="Viewable by anyone."><a data-id="public" href="#"><i class='fa fa-globe fa-fw'></i> Public</a></li><li title="Viewable by anyone but not listed anywhwere (secret URL)."><a data-id="unlisted" href="#"><i class='fa fa-list-ul fa-fw'></i> Unlisted</a></li><li title="Viewable only by you."><a data-id="private" href="#"><i class='fa fa-lock fa-fw'></i> Private</a></li></ul></span></div></div></div></div><div class='form-group' style='width:100%;'><label>Categories:</label><div class='input-group' style='width:100%;'><span class="input-group-addon" title=""><i class='fa fa-tag'></i></span><input class='form-control input' style='width:100%;'
+						value="Coin" disabled></div></div></form><div style='text-align:left;'><a id='deleteBtn' class='' href="#"><small style='color:#f00;'>Delete Contract</small></a></div></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button><button type="button" class="btn btn-primary btn-loading" id='saveMetaBtn'
+					data-loading-text="<i class='fa fa-spin fa-spinner'></i> Saving...">Save changes</button></div></div></div></div><!-- Editor Preferences Modal --><div class="modal fade" id="prefModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog" style='width:320px;'><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><h4 class="modal-title"><i class='fa fa-cog'></i> Editor Preferences</h4></div><div class="modal-body"><form class='form'><div class='form-group'><label>Theme:</label><div class="input-group"><button id="btnTheme" class="btn btn-default dropdown-toggle"
+							data-toggle="dropdown" type="button"
+							name="theme" value=""
+							style='min-height:30px; width:100%; text-align:left;'><span class='caret'></span></button><ul id='dropdownThemes' class="dropdown-menu scrollable-menu" role="menu" style='left:auto;'><li style='display:none;'><a></a></li></ul></div></div><div class='form-group'><label>Font size:</label><div class='input-group'><span class="input-group-addon" title=""><i class='fa fa-font'></i></span><input id='fontSize' class='form-control input' type='number' value="10"></div></div><div class='form-group'><label>Tab size:</label><div class='input-group'><span class="input-group-addon" title=""><i class='fa fa-indent'></i></span><input id='tabSize' class='form-control input' type='number' value="4"></div></div><div class='form-group'><div class='checkbox'><label><input id='softTabs' type='checkbox'> Soft tabs</label></div><div class='checkbox'><label><input id='wrapMode' type='checkbox'> Wrap mode</label></div><div class='checkbox'><label><input id='highlightActiveLine' type='checkbox'> Highlight active line</label></div><div class='checkbox'><label><input id='showPrintMargin' type='checkbox'> Show print margin</label></div></div></form></div><div class="modal-footer"><!--button type="button" class="btn btn-warning" id='resetPrefBtn'>Reset</button--><button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button><button type="button" class="btn btn-primary btn-loading" id='savePrefBtn'
+					data-loading-text="<i class='fa fa-spin fa-spinner'></i> Saving...">Save changes</button></div></div></div></div><!-- User Login Modal --><div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog" style='width:300px;'><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><h4 class="modal-title"><i class='fa fa-user'></i> Login</h4></div><div class="modal-body"><p class=''>You must <a href="/user/login/">Log-in</a> or
+					<a href="/user/register/">Register</a> to <span id='dothat'>do that</span></p></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button><a class="btn btn-primary" href="/user/login/">Login</a><a class="btn btn-success" href="/user/register/">Register</a></div></div></div></div><!-- Delete Contract Modal --><div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog" style='width:300px;'><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><h4 class="modal-title"><i class='fa fa-remove'></i> Delete Contract</h4></div><div class="modal-body"><p class=''>Are you sure you want to delete the contract <b>'<span id='deleteContractName'></span>'</b>?
+				</p></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button><a id='deleteContractBtn' class="btn btn-danger" href="#">Delete</a></div></div></div></div></div></div><div id="push"></div></div><footer id='footer'><div class="container"><div class='row'><div class='col-md-7'><span style='float:left; margin-right:10px; padding-top:4px;'>&copy; 2014 <span style='color:#fff;'>Ether<span class='dot'>.</span>Fund </span>All rights reserved.</span></div><div class='col-md-5 clearfix'><div class='pull-right'><a href="/about">About</a> | <a href="/support/contact"> Contact us</a> | <a href="/terms">Terms of Usage</a> | <a href="/tool/etherface">API</a> | <a target="_blank" href="https://github.com/EtherFund">GitHub</a></div></div></div></div></footer><!-- JavaScript --><!-- jQuery & Bootstrap JS --><script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script><script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script><!-- GLOBALS js --><script type="text/javascript">
+	var gStaticPath = 'http://s3.amazonaws.com/s.saltado.com/'; var gMediaPath = 'http://s3.amazonaws.com/m.saltado.com/'; var gImgPath = 'http://s3.amazonaws.com/m.saltado.com/images/'; var gSitePath = 'http://s3.amazonaws.com/m.saltado.com/sites/ether/';
+	var gPageUrl = 'http://ether.fund/contract/02aed/schellingcoin'; var gCsrfToken = "D3pWyZHf2iKhkcf1S78OaJqqPjw92RG3";
+	var gLang = "en"; var gLocale = ""; var gLocation = {}; var gCurrency = "";
+	var gSearchPath = "/search";
+	var gUser = "AnonymousUser"; var gKeywords = [];
+</script><!-- Combined & Compressed -->
+<!-- <script type="text/javascript" src="http://s3.amazonaws.com/s.saltado.com/js/saltado.js"></script> -->
+<link rel="stylesheet" type="text/css" href="animate.css">
+<!-- <script type="text/javascript" src="http://s3.amazonaws.com/s.saltado.com/js/libs/misc/ethereum.min.js"></script> -->
+<script type="text/javascript">var exports = {};</script>
+<!--
+--><script type="text/javascript" src="ether.face.js"></script>
+<script src="ace.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="ether.contract.js"> 
+</script>
+<!-- <script type="text/javascript" src="http://s3.amazonaws.com/s.saltado.com/js/sites/ether/tools/ether.simulator.js"></script>
+-->
+<script type="text/javascript">
+	// contract
+	var obj = etherParse("[{\u0022fields\u0022: {\u0022code\u0022: \u0022\u0022, \u0022simulator\u0022: null, \u0022image\u0022: null, \u0022depends\u0022: [], \u0022star\u0022: 3, \u0022tutorial\u0022: null, \u0022category\u0022: [2], \u0022privacy\u0022: \u0022public\u0022, \u0022pref\u0022: null, \u0022storage\u0022: null, \u0022platform_ver\u0022: null, \u0022platform\u0022: \u0022ethereum\u0022, \u0022linecount\u0022: 112, \u0022version\u0022: null, \u0022created\u0022: \u00222014\u002D10\u002D23T02:47:29Z\u0022, \u0022stars\u0022: [1, 3, 32], \u0022language_ver\u0022: null, \u0022forks\u0022: [], \u0022icon\u0022: \u0022file\u002Dtext\u002Do\u0022, \u0022type\u0022: \u0022basic\u0022, \u0022eth_id\u0022: null, \u0022hash\u0022: \u002202aed\u0022, \u0022otherlangs\u0022: [], \u0022data\u0022: null, \u0022slug\u0022: \u0022schellingcoin\u0022, \u0022desc\u0022: \u0022SchellingCoin implementation in Serpent by Vitalik Buterin.\u0022, \u0022github\u0022: \u0022https://github.com/ethereum/serpent/blob/master/examples/schellingcoin.se\u0022, \u0022name\u0022: \u0022SchellingCoin\u0022, \u0022language\u0022: \u0022Serpent\u0022, \u0022level\u0022: 1, \u0022url\u0022: null, \u0022author\u0022: 1, \u0022messages\u0022: null, \u0022modified\u0022: \u00222014\u002D12\u002D26T01:40:40Z\u0022, \u0022debug\u0022: null}, \u0022model\u0022: \u0022contract.contract\u0022, \u0022pk\u0022: 17}]");
+	if(obj && obj[0] && obj[0]['fields']) { gObj = obj[0]['fields']; gObj['id'] = obj[0]['pk']; }
+	
+	gPref = etherParse("{\u0022highlightActiveLine\u0022: \u00221\u0022, \u0022softTabs\u0022: \u00221\u0022, \u0022showPrintMargin\u0022: \u00220\u0022, \u0022theme\u0022: \u0022idle_fingers\u0022, \u0022fontSize\u0022: \u002212\u0022, \u0022tabSize\u0022: \u00224\u0022, \u0022wrapMode\u0022: \u00221\u0022}") || EDITOR_DEFAULT;
+	
+	gState = etherParse("{\u0022name\u0022: \u0022view\u0022}") || {'name':'view'};
+</script></body></html>
+
